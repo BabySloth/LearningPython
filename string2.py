@@ -1,4 +1,3 @@
-#!/usr/bin/python2.4 -tt
 # Copyright 2010 Google Inc.
 # Licensed under the Apache License, Version 2.0
 # http://www.apache.org/licenses/LICENSE-2.0
@@ -23,7 +22,7 @@ def verbing(s):
 	elif s[-3:] == "ing":
 		return s + "ly"
 	else:
-		return s + "ing" 
+		return s + "ing"
 
 
 # E. not_bad
@@ -35,7 +34,7 @@ def verbing(s):
 # So 'This dinner is not that bad!' yields:
 # This dinner is good!
 def not_bad(s):
-	if "not" in s and "bad" in s: 	
+	if "not" in s and "bad" in s:
 		notPosition = s.index("not")
 		badPosition = s.index("bad")
 		if notPosition < badPosition:
@@ -54,10 +53,19 @@ def not_bad(s):
 # Given 2 strings, a and b, return a string of the form
 #  a-front + b-front + a-back + b-back
 def front_back(a, b):
- 	aFront = a[:int(math.ceil(float(len(a)) / 2.0))]
-	aBack = a.replace(aFront, "")	
-	bFront = b[:int(math.ceil(float(len(a)) / 2.0))]
+	aFront = bFront = ""
+ 	if len(a) % 2 != 0:
+		aFront = a[:len(a)/2 + 1]
+	else:
+		aFront = a[:len(a)/2]
+	aBack = a.replace(aFront, "")
+
+	if len(b) % 2 != 0:
+		bFront = b[:len(b)/2 + 1]
+	else:
+		bFront = b[:len(b)/2]
 	bBack = b.replace(bFront, "")
+
  	return aFront + bFront + aBack + bBack
 
 
@@ -79,14 +87,12 @@ def main():
   test(verbing('swiming'), 'swimingly')
   test(verbing('do'), 'do')
 
-  print
   print 'not_bad'
   test(not_bad('This movie is not so bad'), 'This movie is good')
   test(not_bad('This dinner is not that bad!'), 'This dinner is good!')
   test(not_bad('This tea is not hot'), 'This tea is not hot')
   test(not_bad("It's bad yet not"), "It's bad yet not")
 
-  print
   print 'front_back'
   test(front_back('abcd', 'xy'), 'abxcdy')
   test(front_back('abcde', 'xyz'), 'abcxydez')
