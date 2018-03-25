@@ -110,7 +110,15 @@ def convert_lines_to_string(linelist):
 
 def convert_lines_to_string2(linelist):
     """Same specification as convert_lines_to_string()"""
-
+    newString = ""
+    for index in list(range(len(linelist))):
+        #Index is now 0, 1 ...
+        if linelist[index]:  # Ignores strings = '' but not '\n'
+            stringValue = str(linelist[index]).strip()
+            if stringValue.endswith('\n'):
+                stringValue = stringValue[:-1]
+            newString = newString + ' ' + stringValue
+    return newString[1:]
     # STUDENTS: Complete this implementation so that it satisfies its
     # specification, with the following constraints, which DIFFER from
     #
@@ -124,8 +132,6 @@ def convert_lines_to_string2(linelist):
     # will not receive credit.
     #
     # The same hint as for convert_lines_to_string applies.
-
-    pass  # STUDENTS: remove this `pass` statement when done
 
 
 def convert_lines_to_paragraphs(linelist):
