@@ -87,7 +87,7 @@ def convert_lines_to_string(linelist):
     for value in linelist:
         if value:
             stringValue = str(value).strip()
-            if stringValue.endswith('\n'):
+            if stringValue[-1:] == '\n':
                 stringValue = stringValue[:-1]
             newString = newString + ' ' + stringValue
     return newString[1:] #Removes leading white space
@@ -115,7 +115,7 @@ def convert_lines_to_string2(linelist):
         #Index is now 0, 1 ...
         if linelist[index]:  # Ignores strings = '' but not '\n'
             stringValue = str(linelist[index]).strip()
-            if stringValue.endswith('\n'):
+            if stringValue[-1:] == '\n':
                 stringValue = stringValue[:-1]
             newString = newString + ' ' + stringValue
     return newString[1:]
