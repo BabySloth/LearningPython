@@ -68,27 +68,12 @@ def get_content_lines(fname=None):
 
 
 def convert_lines_to_string(linelist):
-    """ Returns: a single string that is the concatenation of every non-empty
-    line in linelist except each such line has been stripped of leading and
-    trailing whitespace (including newlines), and there is a single space
-    between what used to be adjacent lines (ignoring lines that were originally
-    empty strings before the stripping of whitespace).
-
-    Example input and output:
-        ["hi\n", "there"] -> "hi there"
-        ["    hola    ", "   salut \n  howdy  "] -> "hola salut \n  howdy"
-        ["so", "la", "", "do"] -> "so la do"
-        ["so", "\n", "la", "", "", "do"] -> "so  la do"
-           ** note the two spaces between "so" and "la"
-
-    Precondition: linelist is a (possibly empty) list of strings.
-    """
     newString = ""
     for value in linelist:
         if value:
+            if value[-1:] == '\n':
+                value = value[:-1]
             stringValue = str(value).strip()
-            if stringValue[-1:] == '\n':
-                stringValue = stringValue[:-1]
             newString = newString + ' ' + stringValue
     return newString[1:] #Removes leading white space
     # STUDENTS: Complete this implementation so that it satisfies its
@@ -114,9 +99,9 @@ def convert_lines_to_string2(linelist):
     for index in list(range(len(linelist))):
         #Index is now 0, 1 ...
         if linelist[index]:  # Ignores strings = '' but not '\n'
+            if linelist[index] == '\n':
+                linelist[index] = linelist[index][:-1]
             stringValue = str(linelist[index]).strip()
-            if stringValue[-1:] == '\n':
-                stringValue = stringValue[:-1]
             newString = newString + ' ' + stringValue
     return newString[1:]
     # STUDENTS: Complete this implementation so that it satisfies its
@@ -135,23 +120,22 @@ def convert_lines_to_string2(linelist):
 
 
 def convert_lines_to_paragraphs(linelist):
-    """ Returns: a list of the paragraph-strings corresponding to
-    the paragraphs in linelist.
+    convertedList = []
+    stanzaSentences = []
+    linelist.append('\n') # The way the code is set up is that it will generate a new part of the convertedlist only if it comes across a '\n' as an individual element in the linelist
+    for part in linelist:
+        if part != '\n':
+            stanzaSentences.append(part)
+        elif stanzaSentences:
+            combined = ""
+            for line in stanzaSentences:
+                fixedLine  = convert_lines_to_string(line.split(" "))
+                combined += " " + fixedLine.strip()
+            convertedList.append(combined[1:]) # [1:] to remove leading white space
+            stanzaSentences = []
+    return convertedList
 
-    Each paragraph in linelist is a maximal contiguous subsequence of lines
-    in linelist such that the sequence does not contain a blank line.
-    A blank line is exactly the string "\n".
 
-    A paragraph-string is the result of running convert_lines_to_string()
-    or convert_lines_to_string2 on a paragraph.
-
-    If linelist is empty, or if all the lines in linelist are empty,
-    returns the empty list.
-
-    See the test cases in a3test.test_convert_lines_to_paragraph() for examples.
-
-    Precondition: linelist is a (possibly empty) list of strings.
-    """
     # STUDENTS: Complete this implementation so that it satisfies its
     # specification, with the following constraints.
     # You MUST make effective use a for-loop.
@@ -178,7 +162,7 @@ def convert_lines_to_paragraphs(linelist):
     # done, run convert_lines_to_string() on that current-paragraph list, and
     # then reset that current-paragraph list to get ready for the next paragraph.
 
-    pass  # STUDENTS: remove this `pass` statement when done
+
 
 
 
