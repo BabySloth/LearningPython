@@ -7,4 +7,12 @@ for item in list(range(len(fruits))):
 		# you are now looping through the fruits using item which has the value of 0 or 1
 		# fruits[0] = ('apples', 'william')
 		# fruits[1] = ('bananas', 'victoria')
+		print x
+		# Prints:
+		'''
+		apples
+		william
+		bananas
+		victoria
+		''''
 		
