@@ -16,28 +16,6 @@ ECON_VOCAB = econ_terms.ECON_VOCAB
 
 #  STUDENTS: this function has been completed for you.
 def get_content_lines(fname=None):
-    """Given filename fname, return a list of normalized lines in the file,
-    except that lines that are 'commented out', in the sense of the first
-    non-whitespace character being a '#', are not included.
-
-    EXCEPTION: if no argument is given, the "fname=None" in the function header
-    sets fname to None (the actual value, NOT the string "None"), which,
-    in the code below, causes the filename to be retrieved from the user via a
-    visual file-open dialog.
-
-    The normalization is almost exactly as described in Section 13.3 "Word histogram" in the
-    text, and in particular the function process_line: hyphens are replaced
-    with spaces (so "highly-flammable programs" would become three words);
-    punctuation at the beginning and ends of words is removed (so that "Really?",
-    "Really!" and "Really" are all treated as the same word), and all words are
-    lower-cased (so that "CS1110" and "cs1110" are treated as the same word.)
-    Leading or trailing whitespace is removed, and all line-internal whitespace
-    is replaced by a single space.
-    However, a "\n" is added to the end of every line.
-
-    Precondition: fname is the name of a plain-text file, OR it is not given by
-    the caller (in which case Python will set parameter fname to None).
-    """
     output = []  # Initialize our accumulator
 
     # This is how to check if something is None (Pythonistas don't use == here.)
@@ -76,21 +54,6 @@ def convert_lines_to_string(linelist):
             stringValue = str(value).strip()
             newString = newString + ' ' + stringValue
     return newString[1:] #Removes leading white space
-    # STUDENTS: Complete this implementation so that it satisfies its
-    # specification, with the following constraints.
-    # You MUST make effective use a for-loop whose header is
-    #   for line in linelist:
-    # (We are testing whether you can work with loops directly over items in
-    # a given list.)
-    #
-    # Hint: dealing with lines that are empty string can be tricky; watch out
-    # that you don't get extra spaces.
-    #
-    # Hint: our solution uses the fact that you can give more than one
-    # argument to range().  For example, list(range(2, 6)) is [2, 3, 4, 5]
-    # (Don't put a colon in the call to range the way I did at first,
-    # costing me an embarrassing amount of time wondering why my code wasn't
-    # syntactically correct ...)
 
 
 def convert_lines_to_string2(linelist):
@@ -104,19 +67,6 @@ def convert_lines_to_string2(linelist):
             stringValue = str(linelist[index]).strip()
             newString = newString + ' ' + stringValue
     return newString[1:]
-    # STUDENTS: Complete this implementation so that it satisfies its
-    # specification, with the following constraints, which DIFFER from
-    #
-    # You MUST make effective use a for-loop whose header is either
-    #   for ind in range(len(linelist)):
-    # or
-    #   for ind in list(range(len(linelist))):
-    # (We are testing whether you can work with loops over the indices of
-    # a given list.)
-    # Implementations that just use the join() string method and/or `map`
-    # will not receive credit.
-    #
-    # The same hint as for convert_lines_to_string applies.
 
 
 def convert_lines_to_paragraphs(linelist):
@@ -136,44 +86,6 @@ def convert_lines_to_paragraphs(linelist):
     return convertedList
 
 
-    # STUDENTS: Complete this implementation so that it satisfies its
-    # specification, with the following constraints.
-    # You MUST make effective use a for-loop.
-    # You must decide for yourself whether it is better to loop over linelist
-    # or over the indices of linelist, or whether it matters.
-    # (We have solutions for either strategy, but one seemed a little trickier
-    # than the other.
-    #
-    # There are a lot of subtleties here.
-    # First, take a close look at the test cases we have given you in
-    # a3text.test_convert_lines_to_paragraph().
-    # Notice that you need to handle cases in which there are multiple
-    # consecutive blank lines.
-    # Try figuring out what you as a human do to get the right answer on the
-    # all of the test cases, before you try to implement your strategy in Python.
-    # If you don't understand a test input or test output, ASK SOMEONE
-    # BEFORE CODING!
-    #
-    # Suggested strategy: you know you want to build up a list that consists of
-    # strings, so it seems that an accumulator variable that you add or append to
-    # makes sense. But each of those strings is created by merging together a
-    # set of lines.  So you might have another variable that stores the lines in
-    # the current paragraph (as defined above). When the current paragraph is
-    # done, run convert_lines_to_string() on that current-paragraph list, and
-    # then reset that current-paragraph list to get ready for the next paragraph.
-
-
-
-
-
-
-
-
-# STUDENTS: we ran this function to provide you a local version of the text
-# of the relevant webpages --- to speed things up for you (you don't have
-# to wait for webserver responses), and to keep the load light on the webserver
-# (we don't want to have 500+ students hitting The Economist's webserver over
-# and over again).
 def download_econ_vocab_data(fname):
     """(over)write into file fname the concatenation of text regarding
     economics-related terminology text from
@@ -237,51 +149,18 @@ def get_econ_vocab(fname):
         return outlist
 
 def track_topic(docs_list, vocab_list):
-    """
-    Returns: a list of the fraction of words in each document in docs_list that
-    are in vocab_list.
+    counter = 0
+    stripped = docs_list[0].split(" ")
+    fixStripped = []
+    for word in stripped: # Make a copy of original string to fix
+        if word:  # Not empty string is good
+            fixStripped.append(word)
+    for word in fixStripped:
+        if word in vocab_list:
+            counter += 1
+    return [counter / len(fixStripped)]
 
-    In more detail...
 
-    Preconditions:
-
-    * docs_list: a (possibly empty) list of nonempty strings, each of which
-    contains at least one non-white-space character. We consider each item of
-    docs_list to be a "document" where the "words" of the document are all the
-    spans of characters that don't contain spaces. No "words" contain beginning
-    or ending punctuation, although internal punctuation is OK.
-    So, this document
-        hey howdy          how's the weather
-    has five words.
-    This document
-        xxx y z3!42
-    has three words.
-    This is NOT a legal document:
-        hey howdy,     how's the weather???
-
-    * vocab_list is a non-empty list of non-empty strings that may contain
-    spaces. We consider each item of vocab_list to be a target "word". No
-    target word can have beginning or ending punctuation, although internal
-    punctuation is OK.
-
-    This function returns a new list outlist such that:
-        * len(outlist) == len(docs_list), and
-        * for each valid index `ind` of docs_list, outlist[i] is the fraction
-          of words in document docs_list[i] that are found in vocab_list.
-          The fraction should be a float rounded to three digits past the
-          decimal point via the round() built-in function.
-
-    Examples:
-    if doclist[0] is "abc abcabc a   a" and vocab_list is ["abc"],
-        then outlist[0] should be .25 (i.e, 1/4).
-    If doclist[1] is "abc abcabc a   a" and vocab_list is ["ABC", "a"],
-        then outlist[1] should be .5 (i.e., 2/4)
-    If doclist[2] is "ab abab a   a" and vocab_list is ["ABC", "a", "ab", "v", "abab"],
-        then outlist[2] should be 1.0 (i.e., 4/4).
-
-    The reason we disallow punctuation is to avoid having to decide whether
-    a document "are you okay?" contains a word in the list ["okay"].
-    """
     # STUDENTS: Complete this implementation so that it satisfies its
     # specification, with the following constraints.
     # You MUST make effective use a for-loop, and you will might need to use a
@@ -296,7 +175,7 @@ def track_topic(docs_list, vocab_list):
     # of words, see the file
     # http://www.cs.cornell.edu/courses/cs1110/2018sp/lectures/lecture12/modules/madlibs2.py
 
-    pass  # STUDENTS: remove this `pass` statement when done
+
 
 if __name__ == '__main__':
     # econ_vocab= get_econ_vocab()
