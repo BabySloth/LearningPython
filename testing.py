@@ -16,3 +16,17 @@ for item in list(range(len(fruits))):
 		victoria
 		''''
 		
+for item in fruits:
+	'''
+	item is now:
+	('apples', 'william')
+	('bananas', 'victoria')
+	'''
+	for x in item:
+		'''
+		x is now:
+		apples
+		william
+		bananas
+		victoria
+		'''
