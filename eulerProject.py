@@ -11,7 +11,7 @@ def problem1():
 	return sum
 
 
-print("Question 1: {}".format(problem1()))  # Solution:  233168
+print("Question 1: " + str(problem1()))  # Solution:  233168
 
 
 def problem2():
@@ -32,7 +32,7 @@ def problem2():
 	return sum
 
 
-print("Question 2: {}".format(problem2()))  # Solution: 4613732
+print("Question 2: " + str(problem2()))  # Solution: 4613732
 
 
 def problem3():
@@ -171,7 +171,7 @@ def problem9():
 				return a * b * c
 
 
-print("Problem 9: {}".format(problem9()))  # Solution: 31875000
+print("Problem 9: {}" + str(problem9()))  # Solution: 31875000
 
 def problem10():
 	sum = 0
