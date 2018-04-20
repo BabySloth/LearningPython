@@ -21,18 +21,18 @@ class ReadSATData:
 				self.rowOfData.append(newLine.split(","))
 		print(self.rowOfData)
 	
-	def get_top_writing_school():
-		# sortedData = sorting("writing", self.rowOfData)
+	def get_top_writing_school(self):
+		sortedData = self.sorting("writing", self.rowOfData)
 		print(sortedData)
 	
-	def get_top_math_school():
+	def get_top_math_school(self):
 		pass
 	
-	def get_top_reading_school():
+	def get_top_reading_school(self):
 		pass	
 
 
-	def sorting(scoreType, array):
+	def sorting(self, scoreType, array):
 		'''
 		Enter 'math', 'writing', 'reading' for parameters
 		 DBN, NAME, Num, Reading, Math, Writing
@@ -59,7 +59,7 @@ class ReadSATData:
 				else:
 					left.append(element)
 			
-			return sorting(scoreType, left) + [pivot] + sorting(scoreType, right)
+			return self.sorting(scoreType, left) + [pivot] + self.sorting(scoreType, right)
 	
 			
 
