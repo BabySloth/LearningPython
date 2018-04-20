@@ -1,92 +1,92 @@
-'''
-Sometimes the data for score can be 's'
-
-'''
-class ReadSATData:
-	filePath = "result.csv"
-	rowOfData = []
-	fileHandle = None
-	
-	def __init__(self):
-		self.fileHandle = open(self.filePath, 'r')
-		
-		# Process data to put into self.rowOfData		
-		self.sterializeData()
-	
-	def sterializeData(self):
-		for idx, line in enumerate(self.fileHandle.readlines()):
-			if idx != 0:
-				newLine = str(line).strip()  # Remove \n if any
-				# Turns string into an array				
-				self.rowOfData.append(newLine.split(","))
-		print(self.rowOfData)
-	
-	def get_top_writing_school(self):
-		sortedData = self.sorting("writing", self.rowOfData)
-		print(sortedData)
-	
-	def get_top_math_school(self):
-		pass
-	
-	def get_top_reading_school(self):
-		pass	
+# William Cao
+# Data Lab
+# 4/23/18
+# Intro Comp Sci 2, Period 10
 
 
-	def sorting(self, scoreType, array):
+def print_results():
+	FILE_PATH = "result.csv"
+	RAW_DATA_ARRAY = process_data(open(FILE_PATH, 'r'))
+
+	# Print top school scores
+	# Add \n to make it easier to read the list
+	statement = "\nTop 10 schools with highest {} scores (greatest to least):"
+	print(statement.format("reading"))
+	print_top_ten(sorting('reading', RAW_DATA_ARRAY), 3)
+
+	print(statement.format("math"))
+	print_top_ten(sorting('math', RAW_DATA_ARRAY), 4)
+
+	print(statement.format("writing"))
+	print_top_ten(sorting('writing', RAW_DATA_ARRAY), 5)
+
+
+def process_data(file_object):
+	data_array = []
+	for idx, line in enumerate(file_object.readlines()):
+		# Ignores column names
+		if idx != 0:
+			# Removes commas that are in the name of the school
+			new_line = line.replace(", ", "")
+			# Removes \n if any
+			new_line = new_line.strip()
+
+			data_array.append(new_line.split(","))
+	return data_array
+
+
+def sorting(sort_type, array):
+	"""Enter 'math', 'writing', 'reading' for parameters
+	DBN, NAME, Num, Reading, Math, Writing
+
+	Follows quick sort algorithm
+	"""
+
+	# Comparing arrays through certain elements from the array
+	index_of_comparison = 0
+	if sort_type == 'reading':
+		index_of_comparison = 3
+	elif sort_type == 'math':
+		index_of_comparison = 4
+	elif sort_type == 'writing':
+		index_of_comparison = 5
+
+	if len(array) < 2:
+		return array
+	else:
+		pivot = array[0]
+		right_bound = []
+		left_bound = []
+
+		# [1:] to compensate for pivot being first element
+		for element in array[1:]:
+			pivot_score = pivot[index_of_comparison]
+			comparison_score = element[index_of_comparison]
+
+			# 's' is not a valid score
+			if comparison_score == 's':
+				comparison_score = 0
+			if pivot_score == 's':
+				pivot_score = 0
+
+			if int(comparison_score) < int(pivot_score):
+				left_bound.append(element)
+			else:
+				right_bound.append(element)
+	# Right + pivot + left to organize from highest score to lowest score
+	return sorting(sort_type, right_bound) + [pivot] + sorting(sort_type, left_bound)
+
+
+def print_top_ten(top_list, position_score):
+	# Only want first 10 schools
+	for idx, detailedArray in enumerate(top_list[0:10]):
 		'''
-		Enter 'math', 'writing', 'reading' for parameters
-		 DBN, NAME, Num, Reading, Math, Writing
-
+		detailedArray[1] gives name of the school
+		detailedArray[position_score] gives score of reading/math/writing depending on list
 		'''
-		positionOfScore = 0
-		if scoreType == 'math':
-			positionOfScore = 4
-		elif scoreType == 'writing':
-			positionOfScore = 5
-		else:
-			positionOfScore == 3
 
-		if len(array) < 2:
-			return array
-		else:
-			pivot = array[0]
-			left = []
-			right = []
-			
-			for element in array[1:]:
-				if element[positionOfScore] > pivot[positionOfScore]:
-					right.append(element)
-				else:
-					left.append(element)
-			
-			return self.sorting(scoreType, left) + [pivot] + self.sorting(scoreType, right)
-	
-			
+		# Add one to idx to compensate for enumerate index beginning at 0
+		print("{}. {} Score: {}".format(idx + 1, detailedArray[1], detailedArray[position_score]))
 
 
-
-
-
-
-
-
-
-
-data = ReadSATData()
-data.get_top_writing_school()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+print_results()
