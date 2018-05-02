@@ -5,8 +5,10 @@
 
 
 def print_results():
+	global FILE_PATH
 	FILE_PATH = "result.csv"
 	RAW_DATA_ARRAY = process_data(open(FILE_PATH, 'r'))
+	print(RAW_DATA_ARRAY)
 
 	# Print top school scores
 	# Add \n to make it easier to read the list
@@ -88,5 +90,46 @@ def print_top_ten(top_list, position_score):
 		# Add one to idx to compensate for enumerate index beginning at 0
 		print("{}. {} Score: {}".format(idx + 1, detailedArray[1], detailedArray[position_score]))
 
+#print_results()
 
-print_results()
+'''
+Bad code for rewriting
+'''
+
+def write_data():
+	data_array = []
+	file_object = open('result.csv', 'r')
+	for idx, line in enumerate(file_object.readlines()):
+		# Removes commas that are in the name of the school
+		new_line = line.replace(", ", "")
+		# Removes \n if any
+		new_line = new_line.strip()
+		data_array.append(new_line.split(","))
+		print(new_line)
+	writing = open('test.csv', 'w')
+	new_stuff = ""
+	for idx, element in enumerate(data_array):
+		array = element
+		if idx == 0:
+			new_stuff += fix(array)
+		else:
+			new_stuff += fix(array + [average(array)])
+	
+	print(new_stuff)
+	writing.write(new_stuff)
+	writing.close()
+
+def average(array):
+	if array[-2] == 's':
+		return 's'
+	else:
+		sum = int(array[-1]) + int(array[-2]) + int(array[-3])
+		return int(sum) / 3
+
+def fix(array):
+	string = ""
+	for item in array:
+		string += "{},".format(item)
+	return string[:-1] + '\n'
+
+write_data()
