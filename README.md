@@ -1,2 +1,8 @@
 # LearningPython
-This is the repo for learning python. Use folder corresponding to you. Help is posted on folder named "help"
+Spring term IntroCS 2018.
+
+Mini lessions / Projects
+# Projects:
+Tick Tac Toe.
+
+First 10 Euler Problems 
